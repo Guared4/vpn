@@ -424,7 +424,7 @@ There are quite a few fields but you can leave some blank
 For some fields there will be a default value,
 If you enter '.', the field will be left blank.
 -----
-Common Name (eg: your user, host, or server name) [Easy-RSA CA]:otus-hw
+Common Name (eg: your user, host, or server name) [Easy-RSA CA]:otus-vpn
 
 CA creation complete and you may now import and sign cert requests.
 Your new CA certificate file for publishing is at:
@@ -454,7 +454,7 @@ There are quite a few fields but you can leave some blank
 For some fields there will be a default value,
 If you enter '.', the field will be left blank.
 -----
-Common Name (eg: your user, host, or server name) [server]:otus-hw
+Common Name (eg: your user, host, or server name) [server]:otus-vpn
 
 Keypair and certificate request completed. Your files are:
 req: /etc/openvpn/pki/reqs/server.req
