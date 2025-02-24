@@ -1,0 +1,72 @@
+---
+
+- name: "Setting VPN"
+  hosts: all
+  become: true
+
+  tasks:
+    
+  - name: "Install packages: openvpn, iperf3, selinux-utils"
+    apt:
+      name:
+        - openvpn
+        - iperf3
+        - python3-selinux
+        - selinux-policy-default
+        - selinux-utils
+      update_cache: true
+      state: present
+
+  - name: Disable SELinux
+    selinux:
+      state: disabled
+
+  - name: Create key-file
+    shell: "openvpn --genkey secret /etc/openvpn/static.key"
+    when: (ansible_hostname == "server")
+
+  - name: Copy static.key
+    fetch:
+      src: /etc/openvpn/static.key
+      dest: templates/keys/static.key
+      flat: yes
+    when: (ansible_hostname == "server")
+
+  - name: Copy file config server
+    copy:
+     src: templates/server.conf_server
+     dest: /etc/openvpn/server.conf
+    when: (ansible_hostname == "server")
+
+  - name: Copy file config unit server
+    copy:
+     src: templates/openvpn@.service_server
+     dest: /etc/systemd/system/openvpn@.service
+    when: (ansible_hostname == "server")
+
+  - name: Copy static.key on client
+    copy:
+      src: templates/keys/static.key
+      dest: /etc/openvpn/static.key
+      owner: root
+      group: root
+      mode: '0600'
+    when: (ansible_hostname == "client")
+
+  - name: Copy file config server
+    copy:
+     src: templates/server.conf_client
+     dest: /etc/openvpn/server.conf
+    when: (ansible_hostname == "client")
+
+  - name: Copy file config unit server
+    copy:
+     src: templates/openvpn@.service_client
+     dest: /etc/systemd/system/openvpn@.service
+    when: (ansible_hostname == "client")
+
+  - name: Start unit
+    shell: "systemctl {{ item }} openvpn@server"
+    with_items:
+     - start
+     - enable
