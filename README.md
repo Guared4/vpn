@@ -25,7 +25,7 @@
 Структура сети    
 [Хост] --- [VPN-сервер] --- [VPN-клиент]
 
-### 2. Запустил playbook vpn.yml    
+### 2. Создал и запустил playbook vpn.yml    
 
 ```shell
 root@ansible:/home/vagrant/ansible# ansible-playbook vpn.yml
